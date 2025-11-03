@@ -51,11 +51,11 @@ export default function TopicDetailModal({
 
   const handleSubtopicClick = (subtopic: Subtopic) => {
     console.log('Subtopic clicked:', subtopic.title);
-    // Open videos in new tab with all subtopics for progress tracking
+    // Navigate to videos page in the same tab with all subtopics for progress tracking
     const subtopicsParam = encodeURIComponent(JSON.stringify(subtopics));
     const url = `/videos?topic=${encodeURIComponent(subtopic.title)}&subject=${encodeURIComponent(subjectName || '')}&subtopics=${subtopicsParam}`;
-    console.log('Opening subtopic videos in new tab:', url);
-    window.open(url, '_blank');
+    console.log('Navigating to subtopic videos:', url);
+    router.push(url);
   };
 
   return (

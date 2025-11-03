@@ -381,8 +381,30 @@ function TopicsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [subjectId, setSubjectId] = useState("");
-  const [currentXP, setCurrentXP] = useState(0);
-  const [level, setLevel] = useState(1);
+  
+  // Load XP and level from localStorage on initialization
+  const [currentXP, setCurrentXP] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const subject = new URLSearchParams(window.location.search).get("subject");
+      if (subject) {
+        const savedXP = localStorage.getItem(`xp-${subject}`);
+        return savedXP ? parseInt(savedXP, 10) : 0;
+      }
+    }
+    return 0;
+  });
+  
+  const [level, setLevel] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const subject = new URLSearchParams(window.location.search).get("subject");
+      if (subject) {
+        const savedLevel = localStorage.getItem(`level-${subject}`);
+        return savedLevel ? parseInt(savedLevel, 10) : 1;
+      }
+    }
+    return 1;
+  });
+  
   const levelXP = level * 500;
 
   const [achievement, setAchievement] = useState<{
@@ -425,20 +447,34 @@ function TopicsContent() {
 
     // Initialize topics for the subject
     if (subject && subjectTopics[subject]) {
-      const initialTopics = subjectTopics[subject].map((topic, index) => ({
-        ...topic,
-        completed: false,
-        locked: index !== 0, // Only first topic is unlocked
-        subtopics: (topicSubtopics[topic.id] || []).map(st => {
-          // Check localStorage for completion
-          const completedKey = `video-completed-${st.title}`;
-          const isCompleted = typeof window !== 'undefined' && localStorage.getItem(completedKey) === 'true';
-          return {
-            ...st,
-            completed: isCompleted
-          };
-        })
-      }));
+      const initialTopics = subjectTopics[subject].map((topic, index) => {
+        // Check localStorage for topic completion
+        const topicCompletedKey = `topic-completed-${subject}-${topic.id}`;
+        const isTopicCompleted = typeof window !== 'undefined' && localStorage.getItem(topicCompletedKey) === 'true';
+        
+        return {
+          ...topic,
+          completed: isTopicCompleted,
+          locked: index !== 0 && !isTopicCompleted, // Unlock if completed or first topic
+          subtopics: (topicSubtopics[topic.id] || []).map(st => {
+            // Check localStorage for completion
+            const completedKey = `video-completed-${st.title}`;
+            const isCompleted = typeof window !== 'undefined' && localStorage.getItem(completedKey) === 'true';
+            return {
+              ...st,
+              completed: isCompleted
+            };
+          })
+        };
+      });
+      
+      // Unlock topics that come after completed topics
+      for (let i = 1; i < initialTopics.length; i++) {
+        if (initialTopics[i - 1].completed) {
+          initialTopics[i].locked = false;
+        }
+      }
+      
       setTopics(initialTopics);
     }
   }, [searchParams]);
@@ -553,6 +589,13 @@ function TopicsContent() {
   }, [selectedTopic]);
 
   const handleTopicComplete = (topicId: string, xpReward: number) => {
+    // Save topic completion to localStorage
+    const subject = searchParams.get("subject");
+    if (subject) {
+      const topicCompletedKey = `topic-completed-${subject}-${topicId}`;
+      localStorage.setItem(topicCompletedKey, 'true');
+    }
+    
     // Update topic completion status
     setTopics(prevTopics => 
       prevTopics.map((topic, index) => {
@@ -571,12 +614,24 @@ function TopicsContent() {
     // Add XP
     const newXP = currentXP + xpReward;
     setCurrentXP(newXP);
+    
+    // Save XP to localStorage
+    if (subject) {
+      localStorage.setItem(`xp-${subject}`, newXP.toString());
+    }
 
     // Check for level up
     if (newXP >= levelXP) {
       const newLevel = level + 1;
       setLevel(newLevel);
-      setCurrentXP(newXP - levelXP);
+      const remainingXP = newXP - levelXP;
+      setCurrentXP(remainingXP);
+      
+      // Save level and updated XP to localStorage
+      if (subject) {
+        localStorage.setItem(`level-${subject}`, newLevel.toString());
+        localStorage.setItem(`xp-${subject}`, remainingXP.toString());
+      }
       
       setAchievement({
         title: "Level Up! 🎉",
