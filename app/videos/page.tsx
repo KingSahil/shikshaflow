@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowLeft, Play, Clock, Eye, ThumbsUp, X, Loader2, Send, Bot, CheckCircle2, Circle } from "lucide-react";
+import { ArrowLeft, Play, Clock, Eye, ThumbsUp, X, Loader2, Send, Bot, CheckCircle2, Circle, Brain, Trophy, Sparkles } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import remarkGfm from 'remark-gfm';
@@ -55,6 +55,16 @@ function VideosContent() {
   const [isSendingMessage, setIsSendingMessage] = useState(false);
   const [activeSubtopicId, setActiveSubtopicId] = useState<string | null>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  
+  // Quiz state
+  const [showQuiz, setShowQuiz] = useState(false);
+  const [quizQuestions, setQuizQuestions] = useState<any[]>([]);
+  const [isGeneratingQuiz, setIsGeneratingQuiz] = useState(false);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>({});
+  const [showResults, setShowResults] = useState(false);
+  const [quizScore, setQuizScore] = useState(0);
+  const [currentVideoTitle, setCurrentVideoTitle] = useState("");
 
   // Load YouTube iframe API
   useEffect(() => {
@@ -209,10 +219,15 @@ function VideosContent() {
     }
   };
 
-  const handleVideoSelect = (videoId: string) => {
+  const handleVideoSelect = (videoId: string, videoTitle: string = "") => {
     setSelectedVideo(videoId);
+    setCurrentVideoTitle(videoTitle);
     setVideoEnded(false);
     setShowCompleteButton(false);
+    setShowQuiz(false);
+    setQuizQuestions([]);
+    setSelectedAnswers({});
+    setShowResults(false);
     
     // Check if current topic is already completed
     const completedKey = `video-completed-${topicTitle}`;
@@ -313,6 +328,73 @@ function VideosContent() {
     setTimeout(() => {
       setActiveSubtopicId(null);
     }, 1000);
+  };
+
+  const handleGenerateQuiz = async () => {
+    setIsGeneratingQuiz(true);
+    setShowQuiz(true);
+    setQuizQuestions([]);
+    setSelectedAnswers({});
+    setShowResults(false);
+    setCurrentQuestionIndex(0);
+
+    try {
+      const response = await fetch('/api/generate-quiz', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          videoTitle: currentVideoTitle,
+          topic: topicTitle,
+          subject: subjectName
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to generate quiz');
+
+      const data = await response.json();
+      setQuizQuestions(data.quiz);
+    } catch (error) {
+      console.error('Quiz generation error:', error);
+      alert('Failed to generate quiz. Please try again.');
+      setShowQuiz(false);
+    } finally {
+      setIsGeneratingQuiz(false);
+    }
+  };
+
+  const handleAnswerSelect = (questionIndex: number, answerIndex: number) => {
+    if (!showResults) {
+      setSelectedAnswers(prev => ({ ...prev, [questionIndex]: answerIndex }));
+    }
+  };
+
+  const handleSubmitQuiz = () => {
+    let score = 0;
+    quizQuestions.forEach((q, idx) => {
+      if (selectedAnswers[idx] === q.correctAnswer) {
+        score++;
+      }
+    });
+    setQuizScore(score);
+    setShowResults(true);
+    
+    // Store quiz completion with score
+    const quizKey = `quiz-completed-${topicTitle}`;
+    const quizScoreKey = `quiz-score-${topicTitle}`;
+    localStorage.setItem(quizKey, 'true');
+    localStorage.setItem(quizScoreKey, score.toString());
+  };
+
+  const handleNextQuestion = () => {
+    if (currentQuestionIndex < quizQuestions.length - 1) {
+      setCurrentQuestionIndex(prev => prev + 1);
+    }
+  };
+
+  const handlePreviousQuestion = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(prev => prev - 1);
+    }
   };
 
   return (
@@ -491,7 +573,7 @@ function VideosContent() {
                 </div>
 
                 {/* Mark Complete Button */}
-                <div className="bg-gray-900 p-4 flex items-center justify-between">
+                <div className="bg-gray-900 p-4 flex items-center justify-between border-b border-gray-700">
                   <div className="text-white">
                     <p className="text-sm text-gray-400">Watching: {topicTitle}</p>
                     <p className="text-xs text-gray-500 mt-1">
@@ -516,6 +598,199 @@ function VideosContent() {
                     >
                       Back to Topics
                     </button>
+                  )}
+                </div>
+
+                {/* Quiz Section */}
+                <div className="bg-gray-800 p-4">
+                  {!showQuiz ? (
+                    <button
+                      onClick={handleGenerateQuiz}
+                      disabled={isGeneratingQuiz}
+                      className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 disabled:from-gray-700 disabled:to-gray-700 text-white rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl disabled:cursor-not-allowed"
+                    >
+                      {isGeneratingQuiz ? (
+                        <>
+                          <Loader2 className="w-5 h-5 animate-spin" />
+                          Generating Quiz with AI...
+                        </>
+                      ) : (
+                        <>
+                          <Brain className="w-5 h-5" />
+                          <Sparkles className="w-4 h-4" />
+                          Generate Quiz with Gemini AI
+                        </>
+                      )}
+                    </button>
+                  ) : (
+                    <div className="space-y-4">
+                      {isGeneratingQuiz ? (
+                        <div className="text-center py-8">
+                          <Loader2 className="w-12 h-12 text-purple-400 animate-spin mx-auto mb-4" />
+                          <p className="text-white font-semibold">Creating personalized quiz...</p>
+                          <p className="text-sm text-gray-400 mt-2">AI is analyzing the video content</p>
+                        </div>
+                      ) : showResults ? (
+                        <div className="space-y-4">
+                          {/* Quiz Results */}
+                          <div className="bg-gradient-to-r from-green-600 to-blue-600 rounded-xl p-6 text-center">
+                            <Trophy className="w-16 h-16 text-yellow-300 mx-auto mb-4" />
+                            <h3 className="text-2xl font-bold text-white mb-2">Quiz Complete!</h3>
+                            <p className="text-3xl font-bold text-white mb-2">
+                              {quizScore} / {quizQuestions.length}
+                            </p>
+                            <p className="text-white/90">
+                              {Math.round((quizScore / quizQuestions.length) * 100)}% Correct
+                            </p>
+                          </div>
+
+                          {/* Review Answers */}
+                          <div className="space-y-4 max-h-96 overflow-y-auto pr-2">
+                            {quizQuestions.map((q, idx) => {
+                              const isCorrect = selectedAnswers[idx] === q.correctAnswer;
+                              return (
+                                <div key={idx} className={`rounded-xl p-4 border-2 ${isCorrect ? 'bg-green-900/30 border-green-500' : 'bg-red-900/30 border-red-500'}`}>
+                                  <div className="flex items-start gap-2 mb-3">
+                                    {isCorrect ? (
+                                      <CheckCircle2 className="w-5 h-5 text-green-400 mt-0.5" />
+                                    ) : (
+                                      <X className="w-5 h-5 text-red-400 mt-0.5" />
+                                    )}
+                                    <p className="text-white font-semibold flex-1">Q{idx + 1}: {q.question}</p>
+                                  </div>
+                                  <div className="ml-7 space-y-2">
+                                    {q.options.map((opt: string, optIdx: number) => (
+                                      <div
+                                        key={optIdx}
+                                        className={`p-2 rounded-lg text-sm ${
+                                          optIdx === q.correctAnswer
+                                            ? 'bg-green-700/50 text-green-100 font-semibold'
+                                            : optIdx === selectedAnswers[idx] && optIdx !== q.correctAnswer
+                                            ? 'bg-red-700/50 text-red-100'
+                                            : 'bg-gray-700/50 text-gray-300'
+                                        }`}
+                                      >
+                                        {String.fromCharCode(65 + optIdx)}. {opt}
+                                        {optIdx === q.correctAnswer && ' ✓'}
+                                        {optIdx === selectedAnswers[idx] && optIdx !== q.correctAnswer && ' ✗'}
+                                      </div>
+                                    ))}
+                                    <p className="text-gray-300 text-xs mt-2 italic">
+                                      💡 {q.explanation}
+                                    </p>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+
+                          <div className="flex gap-3">
+                            <button
+                              onClick={() => {
+                                setShowQuiz(false);
+                                setQuizQuestions([]);
+                                setSelectedAnswers({});
+                                setShowResults(false);
+                                setCurrentQuestionIndex(0);
+                              }}
+                              className="flex-1 px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-semibold transition-colors"
+                            >
+                              Close Quiz
+                            </button>
+                            <button
+                              onClick={() => {
+                                setSelectedAnswers({});
+                                setShowResults(false);
+                                setCurrentQuestionIndex(0);
+                                handleGenerateQuiz();
+                              }}
+                              className="flex-1 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition-colors"
+                            >
+                              Try New Quiz
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="space-y-4">
+                          {/* Progress Bar */}
+                          <div className="flex items-center justify-between text-white mb-2">
+                            <span className="text-sm font-semibold">
+                              Question {currentQuestionIndex + 1} of {quizQuestions.length}
+                            </span>
+                            <span className="text-sm text-gray-400">
+                              {Object.keys(selectedAnswers).length}/{quizQuestions.length} answered
+                            </span>
+                          </div>
+                          <div className="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-300"
+                              style={{ width: `${((currentQuestionIndex + 1) / quizQuestions.length) * 100}%` }}
+                            />
+                          </div>
+
+                          {/* Current Question */}
+                          {quizQuestions[currentQuestionIndex] && (
+                            <div className="bg-gray-900 rounded-xl p-6 border border-gray-700">
+                              <h4 className="text-lg font-bold text-white mb-4">
+                                {quizQuestions[currentQuestionIndex].question}
+                              </h4>
+                              <div className="space-y-3">
+                                {quizQuestions[currentQuestionIndex].options.map((option: string, idx: number) => (
+                                  <button
+                                    key={idx}
+                                    onClick={() => handleAnswerSelect(currentQuestionIndex, idx)}
+                                    className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
+                                      selectedAnswers[currentQuestionIndex] === idx
+                                        ? 'border-purple-500 bg-purple-900/30 text-white'
+                                        : 'border-gray-700 bg-gray-800 text-gray-300 hover:border-gray-600 hover:bg-gray-700'
+                                    }`}
+                                  >
+                                    <div className="flex items-center gap-3">
+                                      <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center font-semibold ${
+                                        selectedAnswers[currentQuestionIndex] === idx
+                                          ? 'border-purple-500 bg-purple-600 text-white'
+                                          : 'border-gray-600 text-gray-400'
+                                      }`}>
+                                        {String.fromCharCode(65 + idx)}
+                                      </div>
+                                      <span className="flex-1">{option}</span>
+                                    </div>
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Navigation Buttons */}
+                          <div className="flex gap-3">
+                            <button
+                              onClick={handlePreviousQuestion}
+                              disabled={currentQuestionIndex === 0}
+                              className="px-6 py-3 bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:cursor-not-allowed text-white rounded-lg font-semibold transition-colors"
+                            >
+                              Previous
+                            </button>
+                            {currentQuestionIndex < quizQuestions.length - 1 ? (
+                              <button
+                                onClick={handleNextQuestion}
+                                className="flex-1 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition-colors"
+                              >
+                                Next Question
+                              </button>
+                            ) : (
+                              <button
+                                onClick={handleSubmitQuiz}
+                                disabled={Object.keys(selectedAnswers).length !== quizQuestions.length}
+                                className="flex-1 px-6 py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-700 disabled:cursor-not-allowed text-white rounded-lg font-semibold transition-colors flex items-center justify-center gap-2"
+                              >
+                                <Trophy className="w-5 h-5" />
+                                Submit Quiz
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   )}
                 </div>
               </div>
@@ -681,7 +956,7 @@ function VideosContent() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
                   className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer"
-                  onClick={() => handleVideoSelect(video.id.videoId)}
+                  onClick={() => handleVideoSelect(video.id.videoId, video.snippet.title)}
                 >
                   {/* Thumbnail */}
                   <div className="relative aspect-video bg-gray-900 overflow-hidden group">

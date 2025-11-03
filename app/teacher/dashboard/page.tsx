@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Plus,
   Edit,
@@ -18,6 +18,7 @@ import {
   Settings,
   FileText,
   TrendingUp,
+  X,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -135,6 +136,11 @@ export default function TeacherDashboard() {
 // Content Management Component
 function ContentManagement() {
   const router = useRouter();
+  const [showAddSubjectModal, setShowAddSubjectModal] = useState(false);
+  const [newSubject, setNewSubject] = useState({
+    name: "",
+    description: "",
+  });
   const [subjects, setSubjects] = useState([
     { id: "mathematics", name: "Mathematics-I", topicCount: 4, videoCount: 25 },
     { id: "engineering-graphics", name: "Engineering Graphics", topicCount: 4, videoCount: 20 },
@@ -143,6 +149,23 @@ function ContentManagement() {
     { id: "punjabi", name: "Punjabi", topicCount: 4, videoCount: 15 },
     { id: "entrepreneurship", name: "Entrepreneurship", topicCount: 4, videoCount: 18 },
   ]);
+
+  const handleAddSubject = () => {
+    if (newSubject.name.trim()) {
+      const newSubjectData = {
+        id: newSubject.name.toLowerCase().replace(/\s+/g, '-'),
+        name: newSubject.name,
+        topicCount: 0,
+        videoCount: 0,
+      };
+      setSubjects([...subjects, newSubjectData]);
+      setNewSubject({ name: "", description: "" });
+      setShowAddSubjectModal(false);
+      
+      // You can also save to localStorage or backend here
+      console.log("New subject added:", newSubjectData);
+    }
+  };
 
   return (
     <div className="space-y-8">
@@ -208,10 +231,21 @@ function ContentManagement() {
       <div>
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-gray-900">Manage Subjects</h2>
-          <button className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-blue-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all">
-            <Plus className="w-5 h-5" />
-            Add New Subject
-          </button>
+          <div className="flex items-center gap-3">
+            <Link href="/subjects">
+              <button className="flex items-center gap-2 px-6 py-3 bg-orange-50 text-orange-600 rounded-xl font-semibold hover:bg-orange-100 transition-all border-2 border-orange-200">
+                <Home className="w-5 h-5" />
+                View as Student
+              </button>
+            </Link>
+            <button 
+              onClick={() => setShowAddSubjectModal(true)}
+              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-blue-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all"
+            >
+              <Plus className="w-5 h-5" />
+              Add New Subject
+            </button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -244,23 +278,88 @@ function ContentManagement() {
                     Manage Content
                   </button>
                 </Link>
-
-                <button className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors font-medium">
-                  <Plus className="w-4 h-4" />
-                  Add Topic/Video
-                </button>
-
-                <Link href={`/subjects?subject=${subject.id}`}>
-                  <button className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-orange-50 text-orange-600 rounded-lg hover:bg-orange-100 transition-colors font-medium">
-                    <Home className="w-4 h-4" />
-                    View as Student
-                  </button>
-                </Link>
               </div>
             </motion.div>
           ))}
         </div>
       </div>
+
+      {/* Add Subject Modal */}
+      <AnimatePresence>
+        {showAddSubjectModal && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowAddSubjectModal(false)}
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            >
+              <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6" onClick={(e) => e.stopPropagation()}>
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-2xl font-bold text-gray-900">Add New Subject</h3>
+                  <button
+                    onClick={() => setShowAddSubjectModal(false)}
+                    className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
+                  >
+                    <X className="w-5 h-5 text-gray-600" />
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Subject Name *
+                    </label>
+                    <input
+                      type="text"
+                      value={newSubject.name}
+                      onChange={(e) => setNewSubject({ ...newSubject, name: e.target.value })}
+                      placeholder="e.g., Computer Science"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Description (Optional)
+                    </label>
+                    <textarea
+                      value={newSubject.description}
+                      onChange={(e) => setNewSubject({ ...newSubject, description: e.target.value })}
+                      placeholder="Brief description of the subject..."
+                      rows={3}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex gap-3 mt-6">
+                  <button
+                    onClick={() => setShowAddSubjectModal(false)}
+                    className="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleAddSubject}
+                    disabled={!newSubject.name.trim()}
+                    className="flex-1 px-4 py-3 bg-gradient-to-r from-green-500 to-blue-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Add Subject
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

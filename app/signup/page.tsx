@@ -108,7 +108,9 @@ export default function SignUpPage() {
       const userCredential = await signup(formData.email, formData.password);
       
       // Store user role and email in localStorage immediately after signup
-      localStorage.setItem(`user-role-email-${formData.email}`, userRole);
+      const roleKey = `user-role-email-${formData.email}`;
+      localStorage.setItem(roleKey, userRole);
+      console.log("Signup - Role stored:", { email: formData.email, roleKey, userRole, storedValue: localStorage.getItem(roleKey) });
       
       if (userRole === "teacher") {
         // Show teacher form after signup
