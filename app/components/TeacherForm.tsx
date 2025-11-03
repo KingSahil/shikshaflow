@@ -438,7 +438,7 @@ export default function TeacherForm({ isOpen, onClose }: TeacherFormProps) {
 
                     <p className="text-center text-sm text-gray-500 mt-4">
                       Already have an account?{" "}
-                      <a href="#" className="text-blue-600 hover:underline font-medium">
+                      <a href="/login" className="text-blue-600 hover:underline font-medium">
                         Sign in
                       </a>
                     </p>

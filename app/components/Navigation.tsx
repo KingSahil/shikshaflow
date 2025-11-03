@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 
 //hmm 
@@ -52,12 +53,13 @@ export default function Navigation({ onGetStartedClick }: NavigationProps) {
                 {item.name}
               </a>
             ))}
-            <button 
-              onClick={onGetStartedClick}
-              className="px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300"
-            >
-              Get Started
-            </button>
+            <Link href="/signup">
+              <button 
+                className="px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300"
+              >
+                Get Started
+              </button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -87,12 +89,13 @@ export default function Navigation({ onGetStartedClick }: NavigationProps) {
                 {item.name}
               </a>
             ))}
-            <button 
-              onClick={onGetStartedClick}
-              className="w-full mt-4 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-semibold"
-            >
-              Get Started
-            </button>
+            <Link href="/signup">
+              <button 
+                className="w-full mt-4 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-semibold"
+              >
+                Get Started
+              </button>
+            </Link>
           </motion.div>
         )}
       </div>
