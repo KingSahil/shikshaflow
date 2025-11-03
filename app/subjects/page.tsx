@@ -20,7 +20,9 @@ import {
   Ticket,
   Utensils,
   ShoppingBag,
-  Award
+  Award,
+  Copy,
+  Check
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect, Suspense } from "react";
@@ -34,6 +36,7 @@ function SubjectsContent() {
   const [year, setYear] = useState("1");
   const [semester, setSemester] = useState("1");
   const [activeTab, setActiveTab] = useState<"subjects" | "leaderboard" | "coupons">("subjects");
+  const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -214,6 +217,19 @@ function SubjectsContent() {
     router.push(`/topics?subject=${subjectId}`);
   };
 
+  const handleCopyCode = async (code: string, couponId: number) => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopiedCode(code);
+      // Reset after 2 seconds
+      setTimeout(() => {
+        setCopiedCode(null);
+      }, 2000);
+    } catch (error) {
+      console.error("Failed to copy code:", error);
+    }
+  };
+
   const handleLogout = async () => {
     try {
       await logout();
@@ -367,7 +383,9 @@ function SubjectsContent() {
             {subjects.map((subject, index) => (
               <motion.div
                 key={subject.id}
-                variants={fadeInUp}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
                 whileHover={{ y: -10, scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => handleSubjectClick(subject.id)}
@@ -570,8 +588,25 @@ function SubjectsContent() {
                             <p className="text-xs text-gray-600 mb-1">Coupon Code:</p>
                             <p className="text-xl font-bold text-gray-900 tracking-wider">{coupon.code}</p>
                           </div>
-                          <button className="w-full py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl font-semibold hover:shadow-lg transition-all">
-                            Copy Code
+                          <button 
+                            onClick={() => handleCopyCode(coupon.code, coupon.id)}
+                            className={`w-full py-3 rounded-xl font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2 ${
+                              copiedCode === coupon.code
+                                ? 'bg-green-600 text-white'
+                                : 'bg-gradient-to-r from-green-600 to-green-700 text-white'
+                            }`}
+                          >
+                            {copiedCode === coupon.code ? (
+                              <>
+                                <Check className="w-5 h-5" />
+                                Copied!
+                              </>
+                            ) : (
+                              <>
+                                <Copy className="w-5 h-5" />
+                                Copy Code
+                              </>
+                            )}
                           </button>
                         </div>
                       ) : (
