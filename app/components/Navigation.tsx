@@ -5,7 +5,11 @@ import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
 
-export default function Navigation() {
+interface NavigationProps {
+  onGetStartedClick?: () => void;
+}
+
+export default function Navigation({ onGetStartedClick }: NavigationProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
@@ -44,7 +48,10 @@ export default function Navigation() {
                 {item.name}
               </a>
             ))}
-            <button className="px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300">
+            <button 
+              onClick={onGetStartedClick}
+              className="px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300"
+            >
               Get Started
             </button>
           </div>
@@ -76,7 +83,10 @@ export default function Navigation() {
                 {item.name}
               </a>
             ))}
-            <button className="w-full mt-4 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-semibold">
+            <button 
+              onClick={onGetStartedClick}
+              className="w-full mt-4 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-semibold"
+            >
               Get Started
             </button>
           </motion.div>

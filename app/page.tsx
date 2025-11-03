@@ -18,9 +18,11 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import Navigation from "./components/Navigation";
+import StudentForm from "./components/StudentForm";
 
 export default function Home() {
   const [email, setEmail] = useState("");
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   const fadeInUp = {
     hidden: { opacity: 0, y: 30 },
@@ -105,7 +107,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Navigation />
+      <Navigation onGetStartedClick={() => setIsFormOpen(true)} />
       
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-50 via-white to-orange-50 pt-20">
@@ -146,7 +148,10 @@ export default function Home() {
               variants={fadeInUp}
               className="flex flex-col sm:flex-row gap-4 justify-center items-center"
             >
-              <button className="group px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center gap-2">
+              <button 
+                onClick={() => setIsFormOpen(true)}
+                className="group px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center gap-2"
+              >
                 Get Started
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
@@ -340,7 +345,10 @@ export default function Home() {
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-6 py-4 rounded-full text-gray-900 focus:outline-none focus:ring-4 focus:ring-orange-300 text-lg"
               />
-              <button className="whitespace-nowrap px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center gap-2">
+              <button 
+                onClick={() => setIsFormOpen(true)}
+                className="whitespace-nowrap px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center gap-2"
+              >
                 Get Started
                 <ArrowRight className="w-5 h-5" />
               </button>
@@ -416,6 +424,9 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Student Registration Form Modal */}
+      <StudentForm isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} />
     </div>
   );
 }
