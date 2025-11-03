@@ -132,9 +132,9 @@ function SubjectsContent() {
   // Show loading spinner while checking authentication
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 via-white to-blue-50">
         <div className="text-center">
-          <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto mb-4" />
+          <Loader2 className="w-12 h-12 text-green-600 animate-spin mx-auto mb-4" />
           <p className="text-gray-600">Loading...</p>
         </div>
       </div>
@@ -147,7 +147,7 @@ function SubjectsContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50">
       {/* Header */}
       <div className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10">
         <div className="container mx-auto px-6 py-4">
@@ -209,7 +209,7 @@ function SubjectsContent() {
           {/* Info Banner */}
           <motion.div 
             variants={fadeInUp}
-            className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-6 mb-12 text-white shadow-xl"
+            className="bg-gradient-to-r from-green-500 to-blue-600 rounded-2xl p-6 mb-12 text-white shadow-xl"
           >
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
@@ -264,7 +264,7 @@ function SubjectsContent() {
                         <span className="font-semibold text-gray-900">0%</span>
                       </div>
                       <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
-                        <div className="h-full bg-gradient-to-r from-blue-500 to-purple-600 w-0"></div>
+                        <div className="h-full bg-gradient-to-r from-green-500 to-blue-600 w-0"></div>
                       </div>
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-gray-600 flex items-center gap-1">

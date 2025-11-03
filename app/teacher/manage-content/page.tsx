@@ -181,7 +181,7 @@ function ManageContentComponent() {
         <div className="flex gap-4 mb-8">
           <button
             onClick={() => setShowAddTopicModal(true)}
-            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all"
+            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-blue-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all"
           >
             <Plus className="w-5 h-5" />
             Add New Topic
@@ -206,7 +206,7 @@ function ManageContentComponent() {
               className="bg-white rounded-2xl shadow-lg overflow-hidden"
             >
               {/* Topic Header */}
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white">
+              <div className="bg-gradient-to-r from-green-500 to-blue-600 p-6 text-white">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <h3 className="text-2xl font-bold mb-2">{topic.title}</h3>
@@ -350,7 +350,7 @@ function ManageContentComponent() {
                   <div className="flex gap-4 pt-4">
                     <button
                       onClick={handleAddTopic}
-                      className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all"
+                      className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-blue-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all"
                     >
                       <Save className="w-5 h-5" />
                       Save Topic

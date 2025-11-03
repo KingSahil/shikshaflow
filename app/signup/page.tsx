@@ -194,7 +194,7 @@ export default function SignUpPage() {
         {/* Sign Up Card */}
         <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-8 text-white text-center">
+          <div className="bg-gradient-to-r from-green-500 to-blue-600 p-8 text-white text-center">
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
@@ -206,7 +206,7 @@ export default function SignUpPage() {
             <h1 className="text-3xl font-bold mb-2">
               {userRole === "teacher" ? "Join as University/Teacher" : "Create Account"}
             </h1>
-            <p className="text-blue-100">
+            <p className="text-green-100">
               {userRole === "teacher" 
                 ? "First, create your account. Then complete teacher registration." 
                 : "Start your learning journey today!"}
@@ -232,7 +232,7 @@ export default function SignUpPage() {
                     className={`w-full pl-12 pr-4 py-3 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all text-gray-900 ${
                       errors.email
                         ? "border-red-300 focus:border-red-500 focus:ring-red-200"
-                        : "border-gray-200 focus:border-blue-500 focus:ring-blue-200"
+                        : "border-gray-200 focus:border-green-500 focus:ring-green-200"
                     }`}
                     placeholder="student@example.com"
                   />
@@ -267,7 +267,7 @@ export default function SignUpPage() {
                     className={`w-full pl-12 pr-12 py-3 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all text-gray-900 ${
                       errors.password
                         ? "border-red-300 focus:border-red-500 focus:ring-red-200"
-                        : "border-gray-200 focus:border-blue-500 focus:ring-blue-200"
+                        : "border-gray-200 focus:border-green-500 focus:ring-green-200"
                     }`}
                     placeholder="Create a strong password"
                   />
@@ -309,7 +309,7 @@ export default function SignUpPage() {
                     className={`w-full pl-12 pr-12 py-3 border-2 rounded-xl focus:outline-none focus:ring-2 transition-all text-gray-900 ${
                       errors.confirmPassword
                         ? "border-red-300 focus:border-red-500 focus:ring-red-200"
-                        : "border-gray-200 focus:border-blue-500 focus:ring-blue-200"
+                        : "border-gray-200 focus:border-green-500 focus:ring-green-200"
                     }`}
                     placeholder="Re-enter your password"
                   />
@@ -339,7 +339,7 @@ export default function SignUpPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                className="w-full bg-gradient-to-r from-green-500 to-blue-600 text-white py-3 rounded-xl font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
                 {isLoading ? (
                   <>
@@ -359,7 +359,7 @@ export default function SignUpPage() {
             <div className="mt-8 text-center">
               <p className="text-gray-600">
                 Already have an account?{" "}
-                <Link href="/login" className="text-blue-600 hover:text-blue-700 font-semibold hover:underline">
+                <Link href="/login" className="text-green-600 hover:text-green-700 font-semibold hover:underline">
                   Sign in here
                 </Link>
               </p>

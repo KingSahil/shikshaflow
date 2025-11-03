@@ -69,7 +69,7 @@ export default function TeacherDashboard() {
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
                 SikshaFlow Teacher Portal
               </h1>
             </div>
@@ -98,7 +98,7 @@ export default function TeacherDashboard() {
               onClick={() => setActiveTab("content")}
               className={`flex items-center gap-2 px-4 py-4 border-b-2 transition-colors ${
                 activeTab === "content"
-                  ? "border-blue-600 text-blue-600"
+                  ? "border-green-600 text-green-600"
                   : "border-transparent text-gray-600 hover:text-gray-900"
               }`}
             >
@@ -109,7 +109,7 @@ export default function TeacherDashboard() {
               onClick={() => setActiveTab("analytics")}
               className={`flex items-center gap-2 px-4 py-4 border-b-2 transition-colors ${
                 activeTab === "analytics"
-                  ? "border-blue-600 text-blue-600"
+                  ? "border-green-600 text-green-600"
                   : "border-transparent text-gray-600 hover:text-gray-900"
               }`}
             >
@@ -208,7 +208,7 @@ function ContentManagement() {
       <div>
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-gray-900">Manage Subjects</h2>
-          <button className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all">
+          <button className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-blue-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all">
             <Plus className="w-5 h-5" />
             Add New Subject
           </button>
@@ -223,9 +223,9 @@ function ContentManagement() {
               transition={{ delay: index * 0.1 }}
               className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all border border-gray-100 overflow-hidden"
             >
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4 text-white">
+              <div className="bg-gradient-to-r from-green-500 to-blue-600 p-4 text-white">
                 <h3 className="font-bold text-lg mb-1">{subject.name}</h3>
-                <div className="flex items-center gap-4 text-sm text-blue-100">
+                <div className="flex items-center gap-4 text-sm text-green-100">
                   <span className="flex items-center gap-1">
                     <FileText className="w-4 h-4" />
                     {subject.topicCount} Topics
@@ -239,19 +239,19 @@ function ContentManagement() {
 
               <div className="p-4 space-y-3">
                 <Link href={`/teacher/manage-content?subject=${subject.id}`}>
-                  <button className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors font-medium">
+                  <button className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-colors font-medium">
                     <Edit className="w-4 h-4" />
                     Manage Content
                   </button>
                 </Link>
 
-                <button className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-colors font-medium">
+                <button className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors font-medium">
                   <Plus className="w-4 h-4" />
                   Add Topic/Video
                 </button>
 
                 <Link href={`/subjects?subject=${subject.id}`}>
-                  <button className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 transition-colors font-medium">
+                  <button className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-orange-50 text-orange-600 rounded-lg hover:bg-orange-100 transition-colors font-medium">
                     <Home className="w-4 h-4" />
                     View as Student
                   </button>
@@ -380,7 +380,7 @@ function StudentAnalytics() {
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+              <thead className="bg-gradient-to-r from-green-500 to-blue-600 text-white">
                 <tr>
                   <th className="px-6 py-4 text-left text-sm font-semibold">Student</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold">Progress</th>
@@ -417,7 +417,7 @@ function StudentAnalytics() {
                           </div>
                           <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
                             <div
-                              className="h-full bg-gradient-to-r from-blue-500 to-purple-600 transition-all"
+                              className="h-full bg-gradient-to-r from-green-500 to-blue-600 transition-all"
                               style={{ width: `${progress}%` }}
                             ></div>
                           </div>
@@ -429,7 +429,7 @@ function StudentAnalytics() {
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="inline-flex items-center px-3 py-1 bg-purple-100 text-purple-700 rounded-full font-semibold text-sm">
+                        <span className="inline-flex items-center px-3 py-1 bg-green-100 text-green-700 rounded-full font-semibold text-sm">
                           Level {student.level}
                         </span>
                       </td>
@@ -437,7 +437,7 @@ function StudentAnalytics() {
                         <span className="text-sm text-gray-600">{student.lastActive}</span>
                       </td>
                       <td className="px-6 py-4">
-                        <button className="px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors font-medium text-sm">
+                        <button className="px-4 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-colors font-medium text-sm">
                           View Details
                         </button>
                       </td>

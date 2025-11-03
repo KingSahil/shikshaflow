@@ -47,25 +47,25 @@ export default function Home() {
       icon: <Calendar className="w-8 h-8" />,
       title: "Smart Timetables",
       description: "AI-powered scheduling that adapts to your learning pace and preferences.",
-      color: "from-blue-500 to-blue-600"
+      color: "from-green-500 to-green-600"
     },
     {
       icon: <Brain className="w-8 h-8" />,
       title: "AI-powered Learning Insights",
       description: "Get personalized recommendations and track your progress with intelligent analytics.",
-      color: "from-orange-500 to-orange-600"
+      color: "from-blue-500 to-blue-600"
     },
     {
       icon: <GraduationCap className="w-8 h-8" />,
       title: "Interactive Attendance & Grades",
       description: "Seamless tracking and real-time updates on your academic performance.",
-      color: "from-blue-600 to-blue-700"
+      color: "from-orange-500 to-orange-600"
     },
     {
       icon: <MessageSquare className="w-8 h-8" />,
       title: "University-Wide Communication",
       description: "Stay connected with peers, teachers, and institutions in one place.",
-      color: "from-orange-600 to-orange-700"
+      color: "from-purple-500 to-purple-600"
     }
   ];
 
@@ -135,7 +135,7 @@ export default function Home() {
 
             <motion.h1 
               variants={fadeInUp}
-              className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-700 via-blue-600 to-orange-500 bg-clip-text text-transparent"
+              className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-green-600 via-blue-600 to-orange-500 bg-clip-text text-transparent"
             >
               Reimagining Education,<br />The Smarter Way
             </motion.h1>
@@ -153,7 +153,7 @@ export default function Home() {
             >
               <Link href="/signup?role=student">
                 <button 
-                  className="group px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center gap-2"
+                  className="group px-8 py-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center gap-2"
                 >
                   Get Started
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -161,7 +161,7 @@ export default function Home() {
               </Link>
               <Link href="/signup?role=teacher">
                 <button 
-                  className="px-8 py-4 bg-white text-blue-600 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 border-2 border-blue-600 flex items-center gap-2"
+                  className="px-8 py-4 bg-white text-green-600 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 border-2 border-green-600 flex items-center gap-2"
                 >
                   <School className="w-5 h-5" />
                   Join as University
@@ -308,7 +308,7 @@ export default function Home() {
                 className="bg-gradient-to-br from-blue-50 to-white p-8 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 border border-blue-100"
               >
                 <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-orange-500 rounded-full flex items-center justify-center text-white font-bold mr-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-green-600 to-blue-500 rounded-full flex items-center justify-center text-white font-bold mr-4">
                     {testimonial.avatar}
                   </div>
                   <div>
@@ -328,14 +328,14 @@ export default function Home() {
         <div className="container mx-auto px-6">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-orange-400 bg-clip-text text-transparent">
+              <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">
                 ShikshaFlow
               </h3>
               <p className="text-gray-400 mb-4">
                 Reimagining education for a smarter tomorrow.
               </p>
               <div className="flex gap-4">
-                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors">
+                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-green-600 transition-colors">
                   <Twitter className="w-5 h-5" />
                 </a>
                 <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors">
@@ -344,7 +344,7 @@ export default function Home() {
                 <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-orange-600 transition-colors">
                   <Instagram className="w-5 h-5" />
                 </a>
-                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors">
+                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-green-600 transition-colors">
                   <Mail className="w-5 h-5" />
                 </a>
               </div>

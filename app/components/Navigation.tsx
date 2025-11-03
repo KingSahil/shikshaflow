@@ -34,10 +34,10 @@ export default function Navigation({ onGetStartedClick }: NavigationProps) {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <a href="#" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-orange-500 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-blue-500 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-xl">S</span>
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-blue-700 to-orange-500 bg-clip-text text-transparent">
+            <span className="text-2xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
               ShikshaFlow
             </span>
           </a>
@@ -48,14 +48,14 @@ export default function Navigation({ onGetStartedClick }: NavigationProps) {
               <a
                 key={item.name}
                 href={item.href}
-                className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
+                className="text-gray-700 hover:text-green-600 font-medium transition-colors"
               >
                 {item.name}
               </a>
             ))}
             <Link href="/signup">
               <button 
-                className="px-6 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300"
+                className="px-6 py-2 bg-gradient-to-r from-green-500 to-blue-600 text-white rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300"
               >
                 Get Started
               </button>
@@ -84,14 +84,14 @@ export default function Navigation({ onGetStartedClick }: NavigationProps) {
                 key={item.name}
                 href={item.href}
                 onClick={() => setIsOpen(false)}
-                className="block py-3 text-gray-700 hover:text-blue-600 font-medium transition-colors"
+                className="block py-3 text-gray-700 hover:text-green-600 font-medium transition-colors"
               >
                 {item.name}
               </a>
             ))}
             <Link href="/signup">
               <button 
-                className="w-full mt-4 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-semibold"
+                className="w-full mt-4 px-6 py-3 bg-gradient-to-r from-green-500 to-blue-600 text-white rounded-full font-semibold"
               >
                 Get Started
               </button>
