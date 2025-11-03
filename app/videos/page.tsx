@@ -4,6 +4,11 @@ import { useState, useEffect, Suspense, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, Play, Clock, Eye, ThumbsUp, X, Loader2, Send, Bot, CheckCircle2, Circle } from "lucide-react";
+import ReactMarkdown from 'react-markdown';
+import remarkMath from 'remark-math';
+import remarkGfm from 'remark-gfm';
+import rehypeKatex from 'rehype-katex';
+import 'katex/dist/katex.min.css';
 
 // Declare YouTube types
 declare global {
@@ -197,6 +202,7 @@ function VideosContent() {
     setSelectedVideo(null);
     setVideoEnded(false);
     setShowCompleteButton(false);
+    setVideoWatched(false); // Reset watched state when closing
     if (playerRef.current) {
       playerRef.current.destroy();
       playerRef.current = null;
@@ -207,6 +213,11 @@ function VideosContent() {
     setSelectedVideo(videoId);
     setVideoEnded(false);
     setShowCompleteButton(false);
+    
+    // Check if current topic is already completed
+    const completedKey = `video-completed-${topicTitle}`;
+    const isAlreadyCompleted = localStorage.getItem(completedKey) === 'true';
+    setVideoWatched(isAlreadyCompleted);
     
     // Initialize YouTube player after a short delay
     setTimeout(() => {
@@ -350,12 +361,66 @@ function VideosContent() {
                   
                   {chatMessages.map((msg, idx) => (
                     <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                      <div className={`max-w-[85%] rounded-2xl px-4 py-2 ${
+                      <div className={`max-w-[85%] rounded-2xl px-4 py-3 ${
                         msg.role === 'user' 
                           ? 'bg-blue-600 text-white' 
                           : 'bg-gray-800 text-gray-100 border border-gray-700'
                       }`}>
-                        <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+                        {msg.role === 'user' ? (
+                          <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+                        ) : (
+                          <div className="text-sm prose prose-invert prose-sm max-w-none
+                            prose-p:my-2 prose-p:leading-relaxed
+                            prose-headings:text-gray-100 prose-headings:font-bold
+                            prose-h1:text-lg prose-h2:text-base prose-h3:text-sm
+                            prose-strong:text-white prose-strong:font-bold
+                            prose-em:text-blue-300 prose-em:italic
+                            prose-code:text-blue-300 prose-code:bg-gray-900 prose-code:px-1 prose-code:py-0.5 prose-code:rounded
+                            prose-pre:bg-gray-900 prose-pre:border prose-pre:border-gray-700
+                            prose-ul:my-2 prose-ol:my-2 prose-li:my-1
+                            prose-a:text-blue-400 prose-a:underline
+                            prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:pl-4 prose-blockquote:italic
+                          ">
+                            <ReactMarkdown
+                              remarkPlugins={[remarkMath, remarkGfm]}
+                              rehypePlugins={[rehypeKatex]}
+                              components={{
+                                // Custom component for better code block styling
+                                code: ({node, className, children, ...props}: any) => {
+                                  const isInline = !className || !className.includes('language-');
+                                  return isInline ? (
+                                    <code className="text-blue-300 bg-gray-900 px-1.5 py-0.5 rounded text-xs font-mono" {...props}>
+                                      {children}
+                                    </code>
+                                  ) : (
+                                    <code className="block bg-gray-900 p-3 rounded-lg border border-gray-700 text-xs font-mono overflow-x-auto" {...props}>
+                                      {children}
+                                    </code>
+                                  );
+                                },
+                                // Style links
+                                a: ({node, children, ...props}) => (
+                                  <a className="text-blue-400 hover:text-blue-300 underline" target="_blank" rel="noopener noreferrer" {...props}>
+                                    {children}
+                                  </a>
+                                ),
+                                // Style lists
+                                ul: ({node, children, ...props}) => (
+                                  <ul className="list-disc list-inside space-y-1 my-2" {...props}>
+                                    {children}
+                                  </ul>
+                                ),
+                                ol: ({node, children, ...props}) => (
+                                  <ol className="list-decimal list-inside space-y-1 my-2" {...props}>
+                                    {children}
+                                  </ol>
+                                ),
+                              }}
+                            >
+                              {msg.content}
+                            </ReactMarkdown>
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}
