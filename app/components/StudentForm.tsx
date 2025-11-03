@@ -174,7 +174,7 @@ export default function StudentForm({ isOpen, onClose }: StudentFormProps) {
                       <motion.path d="M20 6L9 17l-5-5" />
                     </motion.svg>
                   </div>
-                  <h3 className="text-3xl font-bold text-gray-900 mb-2">Welcome to SikshaFlow!</h3>
+                  <h3 className="text-3xl font-bold text-gray-900 mb-2">Welcome to shikshaFlow!</h3>
                   <p className="text-gray-600 text-lg">Your registration is complete. Let's start your journey!</p>
                 </motion.div>
               )}
@@ -189,7 +189,7 @@ export default function StudentForm({ isOpen, onClose }: StudentFormProps) {
                   <h2 className="text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-blue-700 to-orange-500 bg-clip-text text-transparent">
                     Student Registration
                   </h2>
-                  <p className="text-gray-600">Join thousands of students already using SikshaFlow</p>
+                  <p className="text-gray-600">Join thousands of students already using shikshaFlow</p>
                 </div>
 
                 {/* Form */}

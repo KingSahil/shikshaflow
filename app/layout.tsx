@@ -10,7 +10,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "SikshaFlow - Reimagining Education, The Smarter Way",
+  title: "shikshaFlow - Reimagining Education, The Smarter Way",
   description: "A smart education management platform designed to fix inefficiencies in the university system. Streamline assignments, attendance, learning analytics, and more.",
   icons: {
     icon: "/favicon.ico",

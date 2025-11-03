@@ -128,7 +128,7 @@ function SubjectsContent() {
       xpRequired: 2000,
       icon: Utensils,
       color: "from-red-500 to-red-600",
-      code: "SIKSHA200",
+      code: "shiksha200",
       expiresIn: "30 days",
       unlocked: false
     },
@@ -255,7 +255,7 @@ function SubjectsContent() {
               </button>
               <div>
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  SikshaFlow
+                  shikshaFlow
                 </h1>
                 <p className="text-sm text-gray-600">Year {year} - Semester {semester}</p>
               </div>
@@ -358,7 +358,10 @@ function SubjectsContent() {
           {/* Subjects Grid */}
           {activeTab === "subjects" && (
           <motion.div 
-            variants={staggerContainer}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
             {subjects.map((subject, index) => (
@@ -423,7 +426,13 @@ function SubjectsContent() {
 
           {/* Leaderboard Section */}
           {activeTab === "leaderboard" && (
-            <motion.div variants={fadeInUp} className="space-y-6">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-6"
+            >
               <div className="text-center mb-8">
                 <h2 className="text-3xl font-bold text-gray-900 mb-2">Global Leaderboard</h2>
                 <p className="text-gray-600">Compete with students worldwide and climb the ranks!</p>
@@ -499,7 +508,13 @@ function SubjectsContent() {
 
           {/* Coupons & Goodies Section */}
           {activeTab === "coupons" && (
-            <motion.div variants={fadeInUp} className="space-y-6">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-6"
+            >
               <div className="text-center mb-8">
                 <h2 className="text-3xl font-bold text-gray-900 mb-2">Coupons & Goodies</h2>
                 <p className="text-gray-600">Redeem your XP for exclusive rewards and discounts!</p>

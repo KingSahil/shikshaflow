@@ -1,4 +1,4 @@
-# Firebase Setup Instructions for SikshaFlow
+# Firebase Setup Instructions for shikshaFlow
 
 ## Prerequisites
 - A Google account
@@ -8,7 +8,7 @@
 
 1. Go to [Firebase Console](https://console.firebase.google.com/)
 2. Click "Add project" or "Create a project"
-3. Enter project name: `sikshaflow` (or your preferred name)
+3. Enter project name: `shikshaflow` (or your preferred name)
 4. Click "Continue"
 5. Disable Google Analytics (optional, but you can enable it later)
 6. Click "Create project"
@@ -27,7 +27,7 @@
 ## Step 3: Register Your Web App
 
 1. In the Firebase Console overview page, click the web icon (`</>`)
-2. Enter app nickname: `sikshaflow-web`
+2. Enter app nickname: `shikshaflow-web`
 3. Click "Register app"
 4. You'll see your Firebase configuration object - **COPY THIS**
 5. Click "Continue to console"

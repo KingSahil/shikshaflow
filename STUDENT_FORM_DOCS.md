@@ -1,7 +1,7 @@
 # Student Registration Form - Feature Documentation
 
 ## Overview
-A beautiful, interactive student registration form has been added to SikshaFlow, appearing as a modal when users click the "Get Started" button.
+A beautiful, interactive student registration form has been added to shikshaFlow, appearing as a modal when users click the "Get Started" button.
 
 ## Features Implemented
 

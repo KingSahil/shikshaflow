@@ -1,10 +1,10 @@
-# 🎓 SikshaFlow - Reimagining Education, The Smarter Way
+# 🎓 shikshaFlow - Reimagining Education, The Smarter Way
 
-![SikshaFlow Banner](public/logo.svg)
+![shikshaFlow Banner](public/logo.svg)
 
 ## 📖 About
 
-SikshaFlow is a modern, smart education management platform designed to fix inefficiencies in the current university system. It helps students, teachers, and institutions streamline everything from assignments, attendance, and learning analytics to communication and resource sharing.
+shikshaFlow is a modern, smart education management platform designed to fix inefficiencies in the current university system. It helps students, teachers, and institutions streamline everything from assignments, attendance, and learning analytics to communication and resource sharing.
 
 ## ✨ Features
 
@@ -84,5 +84,5 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ---
 
-Made with ❤️ for education • © 2025 SikshaFlow
+Made with ❤️ for education • © 2025 shikshaFlow
 

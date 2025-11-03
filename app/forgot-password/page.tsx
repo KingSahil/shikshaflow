@@ -182,7 +182,7 @@ export default function ForgotPasswordPage() {
         >
           <p className="text-sm text-gray-600">
             Need help?{" "}
-            <a href="mailto:support@sikshaflow.com" className="text-blue-600 hover:text-blue-700 font-semibold underline">
+            <a href="mailto:support@shikshaflow.com" className="text-blue-600 hover:text-blue-700 font-semibold underline">
               Contact Support
             </a>
           </p>

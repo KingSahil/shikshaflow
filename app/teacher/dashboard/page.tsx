@@ -71,7 +71,7 @@ export default function TeacherDashboard() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <h1 className="text-2xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
-                SikshaFlow Teacher Portal
+                shikshaFlow Teacher Portal
               </h1>
             </div>
             <div className="flex items-center gap-4">

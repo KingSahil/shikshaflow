@@ -145,7 +145,7 @@ export default function TeacherForm({ isOpen, onClose }: TeacherFormProps) {
                       <motion.path d="M20 6L9 17l-5-5" />
                     </motion.svg>
                   </div>
-                  <h3 className="text-3xl font-bold text-gray-900 mb-2">Welcome to SikshaFlow!</h3>
+                  <h3 className="text-3xl font-bold text-gray-900 mb-2">Welcome to shikshaFlow!</h3>
                   <p className="text-gray-600 text-lg">Your teacher registration is complete. Let's transform education!</p>
                 </motion.div>
               )}
