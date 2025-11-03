@@ -48,6 +48,7 @@ function VideosContent() {
   const [chatMessages, setChatMessages] = useState<Array<{ role: 'user' | 'assistant'; content: string }>>([]);
   const [chatInput, setChatInput] = useState("");
   const [isSendingMessage, setIsSendingMessage] = useState(false);
+  const [activeSubtopicId, setActiveSubtopicId] = useState<string | null>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   // Load YouTube iframe API
@@ -282,6 +283,27 @@ function VideosContent() {
     }
   };
 
+  const handleSubtopicClick = (subtopic: { id: string; title: string; completed: boolean }) => {
+    console.log('Subtopic clicked from sidebar:', subtopic.title);
+    
+    // Set active subtopic for visual feedback
+    setActiveSubtopicId(subtopic.id);
+    
+    // Close the current video modal
+    handleCloseVideo();
+    
+    // Update topic title to the selected subtopic
+    setTopicTitle(subtopic.title);
+    
+    // Fetch new videos for this subtopic
+    fetchVideos(subtopic.title);
+    
+    // Reset active subtopic after a short delay
+    setTimeout(() => {
+      setActiveSubtopicId(null);
+    }, 1000);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Video Player Modal */}
@@ -467,39 +489,51 @@ function VideosContent() {
                     </div>
                   ) : (
                     subtopics.map((subtopic, index) => (
-                      <motion.div
+                      <motion.button
                         key={subtopic.id}
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.05 }}
-                        className={`p-3 rounded-lg border transition-all ${
-                          subtopic.completed
-                            ? 'bg-green-900/30 border-green-700'
-                            : 'bg-gray-800 border-gray-700'
+                        onClick={() => handleSubtopicClick(subtopic)}
+                        disabled={activeSubtopicId === subtopic.id}
+                        className={`w-full p-3 rounded-lg border transition-all text-left hover:scale-105 hover:shadow-lg ${
+                          activeSubtopicId === subtopic.id
+                            ? 'bg-blue-900/50 border-blue-500 cursor-wait'
+                            : subtopic.completed
+                            ? 'bg-green-900/30 border-green-700 hover:bg-green-900/40'
+                            : 'bg-gray-800 border-gray-700 hover:bg-gray-700 hover:border-blue-500'
                         }`}
                       >
                         <div className="flex items-start gap-3">
                           <div className="flex-shrink-0 mt-0.5">
-                            {subtopic.completed ? (
+                            {activeSubtopicId === subtopic.id ? (
+                              <Loader2 className="w-5 h-5 text-blue-400 animate-spin" />
+                            ) : subtopic.completed ? (
                               <CheckCircle2 className="w-5 h-5 text-green-400" />
                             ) : (
-                              <Circle className="w-5 h-5 text-gray-600" />
+                              <Play className="w-5 h-5 text-blue-400" fill="currentColor" />
                             )}
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className={`text-sm font-medium ${
-                              subtopic.completed 
+                              activeSubtopicId === subtopic.id
+                                ? 'text-blue-200'
+                                : subtopic.completed 
                                 ? 'text-green-100 line-through' 
                                 : 'text-gray-200'
                             }`}>
                               {subtopic.title}
                             </p>
                             <p className="text-xs text-gray-500 mt-1">
-                              {subtopic.completed ? '✓ Completed' : 'In progress'}
+                              {activeSubtopicId === subtopic.id 
+                                ? 'Loading videos...' 
+                                : subtopic.completed 
+                                ? '✓ Completed' 
+                                : 'Click to watch videos'}
                             </p>
                           </div>
                         </div>
-                      </motion.div>
+                      </motion.button>
                     ))
                   )}
                 </div>
