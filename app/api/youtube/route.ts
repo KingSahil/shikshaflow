@@ -4,6 +4,9 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const query = searchParams.get('q');
   const maxResults = searchParams.get('maxResults') || '10';
+  const videoDuration = searchParams.get('videoDuration');
+  const order = searchParams.get('order') || 'relevance';
+  const pageToken = searchParams.get('pageToken');
 
   if (!query) {
     return NextResponse.json({ error: 'Query parameter is required' }, { status: 400 });
@@ -16,8 +19,17 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const response = await fetch(
-      `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=${maxResults}&key=${apiKey}&videoEmbeddable=true&relevanceLanguage=en`,
+    let apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=${maxResults}&key=${apiKey}&videoEmbeddable=true&relevanceLanguage=en&order=${order}`;
+
+    if (videoDuration) {
+      apiUrl += `&videoDuration=${videoDuration}`;
+    }
+
+    if (pageToken) {
+      apiUrl += `&pageToken=${pageToken}`;
+    }
+
+    const response = await fetch(apiUrl,
       {
         next: { revalidate: 3600 } // Cache for 1 hour
       }

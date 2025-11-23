@@ -1,12 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { 
-  Calculator, 
-  Pencil, 
-  Cog, 
-  Atom, 
-  Languages, 
+import {
+  Calculator,
+  Pencil,
+  Cog,
+  Atom,
+  Languages,
   Briefcase,
   ArrowLeft,
   BookOpen,
@@ -22,11 +22,13 @@ import {
   ShoppingBag,
   Award,
   Copy,
-  Check
+  Check,
+  Film
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect, Suspense } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import StudyReels from "../components/StudyReels";
 
 function SubjectsContent() {
   const router = useRouter();
@@ -35,7 +37,7 @@ function SubjectsContent() {
   const [studentName, setStudentName] = useState("Student");
   const [year, setYear] = useState("1");
   const [semester, setSemester] = useState("1");
-  const [activeTab, setActiveTab] = useState<"subjects" | "leaderboard" | "coupons">("subjects");
+  const [activeTab, setActiveTab] = useState<"subjects" | "leaderboard" | "coupons" | "reels">("subjects");
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
   // Redirect to login if not authenticated
@@ -317,7 +319,7 @@ function SubjectsContent() {
           </motion.div>
 
           {/* Info Banner */}
-          <motion.div 
+          <motion.div
             variants={fadeInUp}
             className="bg-gradient-to-r from-green-500 to-blue-600 rounded-2xl p-6 mb-8 text-white shadow-xl"
           >
@@ -338,113 +340,120 @@ function SubjectsContent() {
           <motion.div variants={fadeInUp} className="flex gap-4 mb-8 bg-white rounded-2xl p-2 shadow-lg">
             <button
               onClick={() => setActiveTab("subjects")}
-              className={`flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-semibold transition-all ${
-                activeTab === "subjects"
-                  ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
-                  : "text-gray-600 hover:bg-gray-100"
-              }`}
+              className={`flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-semibold transition-all ${activeTab === "subjects"
+                ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
+                : "text-gray-600 hover:bg-gray-100"
+                }`}
             >
               <BookOpen className="w-5 h-5" />
               Subjects
             </button>
             <button
               onClick={() => setActiveTab("leaderboard")}
-              className={`flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-semibold transition-all ${
-                activeTab === "leaderboard"
-                  ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
-                  : "text-gray-600 hover:bg-gray-100"
-              }`}
+              className={`flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-semibold transition-all ${activeTab === "leaderboard"
+                ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
+                : "text-gray-600 hover:bg-gray-100"
+                }`}
             >
               <Trophy className="w-5 h-5" />
               Leaderboard
             </button>
             <button
               onClick={() => setActiveTab("coupons")}
-              className={`flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-semibold transition-all ${
-                activeTab === "coupons"
-                  ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
-                  : "text-gray-600 hover:bg-gray-100"
-              }`}
+              className={`flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-semibold transition-all ${activeTab === "coupons"
+                ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
+                : "text-gray-600 hover:bg-gray-100"
+                }`}
             >
               <Gift className="w-5 h-5" />
               Coupons & Goodies
+            </button>
+            <button
+              onClick={() => setActiveTab("reels")}
+              className={`flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-semibold transition-all ${activeTab === "reels"
+                ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
+                : "text-gray-600 hover:bg-gray-100"
+                }`}
+            >
+              <Film className="w-5 h-5" />
+              Study Reels
             </button>
           </motion.div>
 
           {/* Subjects Grid */}
           {activeTab === "subjects" && (
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
-            {subjects.map((subject, index) => (
-              <motion.div
-                key={subject.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -10, scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => handleSubjectClick(subject.id)}
-                className="cursor-pointer"
-              >
-                <div className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-gray-100 hover:border-blue-300">
-                  {/* Subject Header */}
-                  <div className={`bg-gradient-to-r ${subject.color} p-6 text-white`}>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
-                        <subject.icon className="w-8 h-8" />
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            >
+              {subjects.map((subject, index) => (
+                <motion.div
+                  key={subject.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ y: -10, scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => handleSubjectClick(subject.id)}
+                  className="cursor-pointer"
+                >
+                  <div className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-gray-100 hover:border-blue-300">
+                    {/* Subject Header */}
+                    <div className={`bg-gradient-to-r ${subject.color} p-6 text-white`}>
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                          <subject.icon className="w-8 h-8" />
+                        </div>
+                        <div className="flex items-center gap-1 bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">
+                          <BookOpen className="w-4 h-4" />
+                          <span className="text-sm font-semibold">{subject.topicCount} Topics</span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-1 bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">
-                        <BookOpen className="w-4 h-4" />
-                        <span className="text-sm font-semibold">{subject.topicCount} Topics</span>
-                      </div>
-                    </div>
-                    <h3 className="text-2xl font-bold">{subject.name}</h3>
-                  </div>
-
-                  {/* Subject Body */}
-                  <div className="p-6">
-                    <p className="text-gray-600 mb-6">{subject.description}</p>
-                    
-                    {/* Progress Info */}
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-600">Progress</span>
-                        <span className="font-semibold text-gray-900">0%</span>
-                      </div>
-                      <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
-                        <div className="h-full bg-gradient-to-r from-green-500 to-blue-600 w-0"></div>
-                      </div>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-600 flex items-center gap-1">
-                          <Star className="w-4 h-4 text-orange-500 fill-current" />
-                          Total XP
-                        </span>
-                        <span className="font-semibold text-orange-600">{subject.totalXP} XP</span>
-                      </div>
+                      <h3 className="text-2xl font-bold">{subject.name}</h3>
                     </div>
 
-                    {/* Start Button */}
-                    <button
-                      className={`w-full mt-6 py-3 bg-gradient-to-r ${subject.color} text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2`}
-                    >
-                      Start Learning
-                      <BookOpen className="w-5 h-5" />
-                    </button>
+                    {/* Subject Body */}
+                    <div className="p-6">
+                      <p className="text-gray-600 mb-6">{subject.description}</p>
+
+                      {/* Progress Info */}
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-gray-600">Progress</span>
+                          <span className="font-semibold text-gray-900">0%</span>
+                        </div>
+                        <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                          <div className="h-full bg-gradient-to-r from-green-500 to-blue-600 w-0"></div>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-gray-600 flex items-center gap-1">
+                            <Star className="w-4 h-4 text-orange-500 fill-current" />
+                            Total XP
+                          </span>
+                          <span className="font-semibold text-orange-600">{subject.totalXP} XP</span>
+                        </div>
+                      </div>
+
+                      {/* Start Button */}
+                      <button
+                        className={`w-full mt-6 py-3 bg-gradient-to-r ${subject.color} text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2`}
+                      >
+                        Start Learning
+                        <BookOpen className="w-5 h-5" />
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+                </motion.div>
+              ))}
+            </motion.div>
           )}
 
           {/* Leaderboard Section */}
           {activeTab === "leaderboard" && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
@@ -463,9 +472,8 @@ function SubjectsContent() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    className={`flex items-center gap-4 p-6 border-b border-gray-100 hover:bg-gray-50 transition-all ${
-                      student.isCurrentUser ? 'bg-blue-50/50 border-l-4 border-l-blue-500' : ''
-                    }`}
+                    className={`flex items-center gap-4 p-6 border-b border-gray-100 hover:bg-gray-50 transition-all ${student.isCurrentUser ? 'bg-blue-50/50 border-l-4 border-l-blue-500' : ''
+                      }`}
                   >
                     {/* Rank Badge */}
                     <div className="flex-shrink-0">
@@ -526,7 +534,7 @@ function SubjectsContent() {
 
           {/* Coupons & Goodies Section */}
           {activeTab === "coupons" && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
@@ -549,9 +557,8 @@ function SubjectsContent() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    className={`bg-white rounded-2xl shadow-lg overflow-hidden border-2 ${
-                      coupon.unlocked ? 'border-green-400' : 'border-gray-200'
-                    } hover:shadow-xl transition-all`}
+                    className={`bg-white rounded-2xl shadow-lg overflow-hidden border-2 ${coupon.unlocked ? 'border-green-400' : 'border-gray-200'
+                      } hover:shadow-xl transition-all`}
                   >
                     {/* Coupon Header */}
                     <div className={`bg-gradient-to-r ${coupon.color} p-6 text-white relative`}>
@@ -568,7 +575,7 @@ function SubjectsContent() {
                     {/* Coupon Body */}
                     <div className="p-6 space-y-4">
                       <p className="text-gray-700 text-sm">{coupon.description}</p>
-                      
+
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-gray-600">Required XP:</span>
                         <span className="font-bold text-orange-600 flex items-center gap-1">
@@ -588,13 +595,12 @@ function SubjectsContent() {
                             <p className="text-xs text-gray-600 mb-1">Coupon Code:</p>
                             <p className="text-xl font-bold text-gray-900 tracking-wider">{coupon.code}</p>
                           </div>
-                          <button 
+                          <button
                             onClick={() => handleCopyCode(coupon.code, coupon.id)}
-                            className={`w-full py-3 rounded-xl font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2 ${
-                              copiedCode === coupon.code
-                                ? 'bg-green-600 text-white'
-                                : 'bg-gradient-to-r from-green-600 to-green-700 text-white'
-                            }`}
+                            className={`w-full py-3 rounded-xl font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2 ${copiedCode === coupon.code
+                              ? 'bg-green-600 text-white'
+                              : 'bg-gradient-to-r from-green-600 to-green-700 text-white'
+                              }`}
                           >
                             {copiedCode === coupon.code ? (
                               <>
@@ -612,11 +618,10 @@ function SubjectsContent() {
                       ) : (
                         <button
                           disabled={1850 < coupon.xpRequired}
-                          className={`w-full py-3 rounded-xl font-semibold transition-all ${
-                            1850 >= coupon.xpRequired
-                              ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-lg'
-                              : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                          }`}
+                          className={`w-full py-3 rounded-xl font-semibold transition-all ${1850 >= coupon.xpRequired
+                            ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-lg'
+                            : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                            }`}
                         >
                           {1850 >= coupon.xpRequired ? 'Unlock Now' : `Need ${coupon.xpRequired - 1850} more XP`}
                         </button>
@@ -631,6 +636,22 @@ function SubjectsContent() {
                   Complete more topics to unlock exclusive rewards! 🎁
                 </p>
               </div>
+            </motion.div>
+          )}
+
+          {/* Study Reels Section */}
+          {activeTab === "reels" && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold text-gray-900 mb-2">Study Reels</h2>
+                <p className="text-gray-600">Short, AI-curated educational clips to boost your learning!</p>
+              </div>
+              <StudyReels />
             </motion.div>
           )}
 
